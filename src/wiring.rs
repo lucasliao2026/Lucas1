@@ -20,9 +20,10 @@ pub fn configure(p: Peripherals) -> (crate::board::Usb, Ports, Option<Swd>) {
 
     // TODO 1: Pick two exposed 3.3 V GPIOs and pass them to Swd::new.
     // Use Output for SWCLK (initially low), and Flex for bidirectional SWDIO.
-    // 方案：选用开发板外露舵机(PWM)接口中的 PA00 (SWCLK) 和 PA02 (SWDIO)。
-    let swclk = Output::new(p.PA00, Level::Low, Speed::Low);
-    let swdio = Flex::new(p.PA02);
+    // TODO 1: Pick two exposed 3.3 V GPIOs and pass them to Swd::new.
+    // 方案：换成 P1 接口对应的 SWCLK 和 SWDIO 引脚（请核对原理图确认是 PA14/PA13 还是其他）
+    let swclk = Output::new(p.PA14, Level::Low, Speed::Low); // 这里换成实际的 SWCLK 引脚
+    let swdio = Flex::new(p.PA13);                           // 这里换成实际的 SWDIO 引脚
     let swd = Some(Swd::new(swclk, swdio));
 
     // TODO 2: Configure a buffered UART at 115200 baud, 8N1.
