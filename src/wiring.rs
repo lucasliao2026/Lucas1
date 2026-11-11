@@ -32,8 +32,9 @@ pub fn configure(p: Peripherals) -> (crate::board::Usb, Ports, Option<Swd>) {
     // 方案：选用开发板上独立的 UART7 串口接口（TX=PE08, RX=PE07）。
     
     // 声明静态收发缓冲区
-    static mut TX_BUF: [u8; 128] = [0u8; 128];
-    static mut RX_BUF: [u8; 128] = [0u8; 128];
+    static TX_BUF: StaticCell<[u8; 128]> = StaticCell::new();
+    static RX_BUF: StaticCell<[u8; 128]> = StaticCell::new();
+    BufferedUart::new(p.UART7, p.PE7, p.PE8TX_BUF.init([0;128]),RX_BUF.init([0; 128]), Irqs, uart_config).unwrap()
 
     // 配置波特率为 115200，默认即为 8N1
     let mut uart_config = UartConfig::default();
